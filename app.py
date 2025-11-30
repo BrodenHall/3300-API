@@ -19,51 +19,50 @@ def home():
     )
 
 
-# @app.route("/predict", methods=["POST"])
-# def predict():
-#     """
-#     Predict salary based on input JSON payload
-#     Expected keys: age, gender, country, highest_deg, coding_exp, title, company_size
-#     """
-#     print("inside predict")
-#     try:
-#         data = request.get_json()
+@app.route("/predict", methods=["POST"])
+def predict():
+    """
+    Predict salary based on input JSON payload
+    Expected keys: age, gender, country, highest_deg, coding_exp, title, company_size
+    """
+    print("inside predict")
+    try:
+        data = request.get_json()
 
-#         print(f"data from the user: {data}")
+        print(f"data from the user: {data}")
 
-#         required_fields = [
-#             "age",
-#             "gender",
-#             "country",
-#             "highest_deg",
-#             "coding_exp",
-#             "title",
-#             "company_size",
-#         ]
-#         if not all(field in data for field in required_fields):
-#             return jsonify({"error": "Missing one or more required fields"}), 400
+        required_fields = [
+            "age",
+            "gender",
+            "country",
+            "highest_deg",
+            "coding_exp",
+            "title",
+            "company_size",
+        ]
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing one or more required fields"}), 400
 
-#         # Ensure correct order and type
-#         features = [
-#             int(data["age"]),
-#             int(data["gender"]),
-#             int(data["country"]),
-#             int(data["highest_deg"]),
-#             int(data["coding_exp"]),
-#             int(data["title"]),
-#             int(data["company_size"]),
-#         ]
+        # Ensure correct order and type
+        features = [
+            int(data["age"]),
+            int(data["gender"]),
+            int(data["country"]),
+            int(data["highest_deg"]),
+            int(data["coding_exp"]),
+            int(data["title"]),
+            int(data["company_size"]),
+        ]
 
-#         print(f"features before using the model: {data}")
+        prediction = model.predict([features])[0]
 
-#         prediction = model.predict([features])[0]
+        print(f"prediction: {prediction}")
 
-#         print(f"prediction: {prediction}")
+        return jsonify({"predicted_salary": prediction})
 
-#         return jsonify({"predicted_salary": prediction})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
-#     except Exception as e:
-#         return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
